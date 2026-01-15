@@ -40,3 +40,24 @@ export async function POST(req: Request) {
         TASK: Apply the instruction. Return the FULL HTML. Ensure Tailwind/FontAwesome links remain. Return ONLY raw HTML.
       `;
     }
+    const result = await model.generateContent([
+      finalPrompt,
+      {
+        inlineData: {
+          data: base64Data,
+          mimeType: mimeType,
+        },
+      },
+    ]);
+
+    const response = await result.response;
+    const text = response.text();
+    const cleanCode = text.replace(/```html/g, "").replace(/```/g, "").replace(/^Here is the.*/i, "");
+
+    return new Response(JSON.stringify({ code: cleanCode }), { status: 200 });
+
+  } catch (error) {
+    console.error("Error generating code:", error);
+    return new Response(JSON.stringify({ error: "Failed to generate code" }), { status: 500 });
+  }
+}
