@@ -4,7 +4,7 @@
 
 LensUI is a minimal AI tool that converts website screenshots into clean **HTML & Tailwind CSS**. It features a **Live Refinement Loop**, allowing you to chat with the AI to tweak the design in real-time.
 
-### 🔴 [Try the Live Demo][(https://lensui.com/)]
+### 🔴 [Try the Live Demo](https://lensui.com/)
 
 ---
 
