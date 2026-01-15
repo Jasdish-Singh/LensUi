@@ -17,3 +17,26 @@ STRICT RULES:
 5. For icons, use FontAwesome: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 6. Make it responsive.
 `;
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { image, currentCode, instruction } = body;
+
+    if (!image) {
+      return new Response(JSON.stringify({ error: "No image provided" }), { status: 400 });
+    }
+
+    const base64Data = image.split(",")[1];
+    const mimeType = image.split(";")[0].split(":")[1];
+
+    let finalPrompt = SYSTEM_PROMPT;
+
+    if (instruction && currentCode) {
+      finalPrompt = `
+        You are an expert Frontend Developer.
+        CONTEXT: The user has an existing HTML file and wants to make a change.
+        CURRENT HTML: ${currentCode}
+        USER INSTRUCTION: "${instruction}"
+        TASK: Apply the instruction. Return the FULL HTML. Ensure Tailwind/FontAwesome links remain. Return ONLY raw HTML.
+      `;
+    }
